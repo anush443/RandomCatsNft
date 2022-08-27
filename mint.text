@@ -1,0 +1,43 @@
+const { network, ethers } = require("hardhat")
+
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+
+    // Basic NFT
+    // const chillingMollyNft = await ethers.getContract("ChillingMollyNft", deployer)
+    // const chillingMollyMintFee = await chillingMollyNft.getMintFee()
+    // const chillingMollyNftMintTx = await chillingMollyNft.mintNft({
+    //     value: chillingMollyMintFee.toString(),
+    // })
+    // await chillingMollyNftMintTx.wait(1)
+    // console.log(`Basic NFT index 0 tokenURI: ${await chillingMollyNft.tokenURI(0)}`)
+
+    // Dynamic SVG  NFT
+    // const highValue = ethers.utils.parseEther("4000")
+    // const dynamicSvgNft = await ethers.getContract("DynamicSvgNft", deployer)
+    // const dynamicSvgNftMintTx = await dynamicSvgNft.mintNft(highValue)
+    // await dynamicSvgNftMintTx.wait(1)
+    // console.log(`Dynamic SVG NFT index 0 tokenURI: ${await dynamicSvgNft.tokenURI(0)}`)
+
+    // Random IPFS NFT
+    const randomCatsNft = await ethers.getContract("RandomCatsNft", deployer)
+    const mintFee = await randomCatsNft.getMintFee()
+    const randomCatsNftMintTx = await randomCatsNft.requestNft({ value: mintFee.toString() })
+    const randomCatNftMintTxReceipt = await randomCatsNftMintTx.wait(1)
+    // Need to listen for response
+    await new Promise(async (resolve, reject) => {
+        setTimeout(() => reject("Timeout: 'NFTMinted' event did not fire"), 300000) // 5 minute timeout time
+        // setup listener for our event
+        randomCatsNft.once("NftMinted", async () => {
+            resolve()
+        })
+        if (chainId == 31337) {
+            const requestId = randomCatNftMintTxReceipt.events[1].args.requestId.toString()
+            const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock", deployer)
+            await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, randomCatsNft.address)
+        }
+    })
+    console.log(`Random IPFS NFT index 0 tokenURI: ${await randomCatsNft.tokenURI(0)}`)
+}
+module.exports.tags = ["mint"]
