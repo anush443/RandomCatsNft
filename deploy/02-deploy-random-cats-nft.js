@@ -11,9 +11,9 @@ const imagesFilePath = "./images/randomNft"
 const FUND_AMOUNT = "1000000000000000000000"
 
 let tokenUris = [
-    "ipfs://QmSGrKC9PUnKZFZN4VEGDvn1siK6vih9bFzEXfLe33kZhE",
-    "ipfs://QmXwgL9Junkz9EUXmqDGPJYjQhh5BXQEA6SxMnvZyJTXAC",
-    "ipfs://Qma18MXRm5wPi89m7P38CP7MF44dPMY9raGr1WKsVVnJiy",
+    "ipfs://Qmbnot9EaBB457AXrX5d321naHETf3bAuPuSSwaJeaWcVx",
+    "ipfs://QmeKvR5jvLvhYZGoCcX5okYVQ2NHDwvBD8LKv6jonSJjx4",
+    "ipfs://QmVT1fFBNJ1ku3NhzeiC3qmKhRuYCspwZEQ2BfrT4erBxR",
 ]
 
 const metadataTemplate = {
@@ -90,6 +90,17 @@ const handleTokenUris = async () => {
     for (imageUploadResponesIndex in imageUploadRespones) {
         let tokenUriMetadata = { ...metadataTemplate }
         tokenUriMetadata.name = files[imageUploadResponesIndex].replace(".png", "")
+        switch (tokenUriMetadata.name) {
+            case "molly-cat":
+                tokenUriMetadata.description = `${tokenUriMetadata.name} says hello`
+                break
+
+            case "grumpy-cat":
+                tokenUriMetadata.description = `${tokenUriMetadata.name} says arrr`
+                break
+            case "feral-cat":
+                tokenUriMetadata.description = `${tokenUriMetadata.name} says feed me`
+        }
         tokenUriMetadata.description = `${tokenUriMetadata.name} says hello`
         tokenUriMetadata.image = `ipfs://${imageUploadRespones[imageUploadResponesIndex].IpfsHash}`
         console.log(`Uploading ${tokenUriMetadata.name} matadatato pinata`)

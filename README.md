@@ -1,2 +1,2 @@
 
-RandomCatNft is deployed at rinkeby
+RandomCatNft is deployed at  0xb6005057B998421cb309cE8DA4f9388BB210456C rinkeby
