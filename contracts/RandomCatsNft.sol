@@ -46,7 +46,7 @@ contract RandomCatsNft is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
         uint32 callbackGasLimit,
         uint256 mintFee,
         string[3] memory catTokenUris
-    ) VRFConsumerBaseV2(vrfcoordinator) ERC721("Random Cats Nft V2", "RCN") {
+    ) VRFConsumerBaseV2(vrfcoordinator) ERC721("Random Cats Nft V3", "RCN") {
         i_vrfcoordinator = VRFCoordinatorV2Interface(vrfcoordinator);
         i_gasLane = gasLane;
         i_subscriptionId = subscriptionId;
